@@ -498,5 +498,11 @@ fi
 AC_SUBST([BASH_COMPLETION_DIR])
 AM_CONDITIONAL([INSTALL_BASH_COMPLETION],[test "x$with_bash_completion_dir" != "xno"])
 
+if test "x$ac_cv_func_clock_gettime" != "xyes" ||
+    test "x$ac_cv_lib_rt_clock_gettime" != "xyes"; then
+    AC_SUBST([CPP_POSIXFAIL], "-DPOSIXFAIL_CLOCK_GETTIME")
+else
+    AC_SUBST([CPP_POSIXFAIL], "")
+fi
 
 AC_OUTPUT
