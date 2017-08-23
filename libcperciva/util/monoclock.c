@@ -16,6 +16,7 @@
 int
 monoclock_get(struct timeval * tv)
 {
+#ifndef POSIXFAIL_CLOCK_GETTIME
 #if defined(CLOCK_MONOTONIC) || !defined(POSIXFAIL_CLOCK_REALTIME)
 	struct timespec tp;
 #endif
@@ -38,6 +39,12 @@ monoclock_get(struct timeval * tv)
 		goto err0;
 	}
 #else
+	if (gettimeofday(tv, NULL)) {
+		warnp("gettimeofday");
+		goto err0;
+	}
+#endif
+#else	/* POSIXFAIL_CLOCK_GETTIME */
 	if (gettimeofday(tv, NULL)) {
 		warnp("gettimeofday");
 		goto err0;
